@@ -32,7 +32,7 @@ jobs:
           anonymous-telemetry: 1
       - name: Apply roles
         # Enters a command from the cluster, in this case "tctl create -f" using Machine ID credentials to apply roles to the cluster.
-        run: "tctl create -f roles/*.yaml"
+        run: "cd roles; for ROLE in *.yaml; do tctl create -f $ROLE; done"
       - name: List all roles in the cluster file to remote
         # Lists all the roles that exist in the cluster after the operation
         run: "tctl get roles | grep -E '^  name:' | sed 's/  //g' | sort"
