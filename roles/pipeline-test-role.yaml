@@ -1,0 +1,13 @@
+kind: role
+metadata:
+  description: Hello SEs, we're all having fun in Texas
+  name: pipeline-test-role
+spec:
+  allow:
+    logins:
+    - '{{internal.logins}}'
+    - ec2-user
+    node_labels:
+      'env': 'test'
+  deny: {}
+version: v5
