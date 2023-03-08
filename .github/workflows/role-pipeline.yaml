@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started, modify it for your needs.
+on:
+  push:
+    branches:
+      - main
+jobs:
+  role-pipeline-demo:
+    permissions:
+      # The "id-token: write" permission is required or Machine ID will not be
+      # able to authenticate with the cluster.
+      id-token: write
+      contents: read
+    name: role-pipeline-demo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Fetch Teleport binaries
+        uses: teleport-actions/setup@v1
+        with:
+          version: 11.3.5
+      - name: Fetch credentials using Machine ID
+        uses: teleport-actions/auth@v1
+        with:
+          # Use the address of the auth/proxy server for your own cluster.
+          proxy: gus.teleportdemo.com:443
+          # Use the name of the join token resource you created in step 1.
+          token: github-token
+          # valid for. This is optional and defaults to "1h"
+          certificate-ttl: 5m
+          # Enable the submission of anonymous usage telemetry.
+          anonymous-telemetry: 1
+      - name: Apply roles
+        # Enters a command from the cluster, in this case "tctl create -f" using Machine ID credentials to apply roles to the cluster.
+        run: "tctl -i ${{ steps.auth.outputs.identity-file }} create -f roles/*.yaml"
+      - name: List all roles in the cluster file to remote
+        # Lists all the roles that exist in the cluster after the operation
+        run: "tctl -i ${{ steps.auth.outputs.identity-file }} get roles | grep -E '^  name:' | sed 's/  //g' | sort"
