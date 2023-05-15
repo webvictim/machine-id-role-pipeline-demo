@@ -1,6 +1,6 @@
 kind: role
 metadata:
-  description: Hello SEs, we're all having fun in Texas
+  description: Pipeline test role
   name: pipeline-test-role
 spec:
   allow:
