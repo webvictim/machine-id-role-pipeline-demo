@@ -9,4 +9,4 @@ spec:
   bot_name: github-demo
   github:
     allow:
-      - repository: webvictim/se-machine-id-role-pipeline-demo
+      - repository: webvictim/machine-id-role-pipeline-demo
